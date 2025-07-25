@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSF Teacher's Guide to Google Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is structured as a single-page dashboard with a persistent sidebar navigation (which collapses on mobile) and a main content area. This task-oriented design was chosen over a linear document to allow teachers to quickly access specific information non-linearly (e.g., jump directly to "Inviting Students" or "Password Reset"). Content from the source report was re-grouped into logical, user-focused themes: 'Getting Started', 'Google Classroom', 'Communication Tools', 'Content & Organization', and 'Help & Support'. This architecture prioritizes user workflow and findability over mirroring the source document's structure, creating a more efficient and intuitive "app-like" experience. -->
+    <!-- Visualization & Content Choices: Report Info: Three methods for inviting students. -> Goal: Compare. -> Viz/Presentation Method: Interactive tabs. -> Interaction: User clicks a tab to reveal instructions for that specific method. -> Justification: More engaging and less overwhelming than a long list of steps. | Report Info: Lists of video URLs. -> Goal: Organize/Inform. -> Viz/Presentation Method: Interactive cards with titles and icons. -> Interaction: User clicks a card to open the video in a new tab. -> Justification: Improves scannability and provides better context than raw links. | Report Info: Tables of data. -> Goal: Organize/Reference. -> Viz/Presentation Method: Styled HTML tables. -> Interaction: None needed. -> Justification: Clear and effective for structured data. | Report Info: Step-by-step procedures. -> Goal: Inform. -> Viz/Presentation Method: Styled, numbered lists. -> Interaction: None needed. -> Justification: Clearly communicates sequential actions. | Library/Method: All interactions are handled with vanilla JavaScript. Chart.js was not used as the source material contains no quantitative data, making a chart inappropriate and irrelevant to the user's goals. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar-link.active, .sidebar-link:hover {
+            background-color: #f0fdfa; /* teal-50 */
+            color: #0d9488; /* teal-600 */
+            transform: translateX(4px);
+        }
+        .tab-button.active {
+            border-color: #0d9488; /* teal-600 */
+            color: #0d9488; /* teal-600 */
+            background-color: #f0fdfa; /* teal-50 */
+        }
+        .content-section {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-gray-800 font-sans">
+    <div id="app-container">
+        <div id="mobile-header" class="lg:hidden bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-20">
+            <h1 class="text-xl font-bold text-teal-700">VSF Guide</h1>
+            <button id="menu-toggle" class="p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="flex">
+            <aside id="sidebar" class="bg-white w-64 min-h-screen p-6 shadow-lg fixed top-0 left-0 -translate-x-full transition-transform z-30 lg:relative lg:translate-x-0 lg:min-h-screen">
+                <div class="mb-8 text-center">
+                    <h1 class="text-2xl font-bold text-teal-700">VSF Teacher Guide</h1>
+                    <p class="text-sm text-gray-500 mt-1">Google Workspace</p>
+                </div>
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#" class="sidebar-link active flex items-center gap-3 font-semibold text-gray-700 rounded-lg px-4 py-3 mb-2" data-target="getting-started"><span>🏠</span> Getting Started</a></li>
+                        <li><a href="#" class="sidebar-link flex items-center gap-3 font-semibold text-gray-700 rounded-lg px-4 py-3 mb-2" data-target="classroom"><span>🏫</span> Google Classroom</a></li>
+                        <li><a href="#" class="sidebar-link flex items-center gap-3 font-semibold text-gray-700 rounded-lg px-4 py-3 mb-2" data-target="communication"><span>💬</span> Communication Tools</a></li>
+                        <li><a href="#" class="sidebar-link flex items-center gap-3 font-semibold text-gray-700 rounded-lg px-4 py-3 mb-2" data-target="content"><span>📚</span> Content & Organization</a></li>
+                        <li><a href="#" class="sidebar-link flex items-center gap-3 font-semibold text-gray-700 rounded-lg px-4 py-3 mb-2" data-target="support"><span>🛠️</span> Help & Support</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <main class="flex-1 p-4 sm:p-6 lg:p-10">
+                <div id="content-area">
+                    <section id="getting-started" class="content-section">
+                        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Your Digital Classroom</h2>
+                            <p class="text-gray-600 mb-6">This interactive guide is designed for Victoria School Foundation teachers to master the Google Workspace for Education suite. Here you'll find everything you need to set up your accounts, install necessary applications, and begin creating a dynamic digital learning environment. The key to unlocking the full potential of these tools is using your official VSF account.</p>
+
+                            <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg mb-8">
+                                <h4 class="font-bold text-amber-800">Always Use Your VSF Account</h4>
+                                <p class="text-amber-700 text-sm mt-1">To access all features, ensure security, and maintain compliance, you must sign in with your official Victoria School Foundation email: <code class="bg-amber-200 text-amber-900 px-1 py-0.5 rounded">yourname@vsf.edu.ph</code>. Personal Gmail accounts do not have the same capabilities or protections.</p>
+                            </div>
+
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Accessing Your Account</h3>
+                             <p class="text-gray-600 mb-6">The most reliable way to use Google Workspace is through a web browser on a computer. This method gives you access to all features and administrative controls.</p>
+                            <ol class="list-decimal list-inside space-y-3 text-gray-700 mb-8">
+                                <li>Open your web browser (e.g., Google Chrome).</li>
+                                <li>Navigate to <a href="https://classroom.google.com" target="_blank" class="text-teal-600 font-medium hover:underline">classroom.google.com</a>.</li>
+                                <li>Enter your full VSF email address (<code class="bg-gray-200 text-gray-800 px-1 py-0.5 rounded">yourname@vsf.edu.ph</code>) and password.</li>
+                                <li>Follow any on-screen prompts to complete the sign-in process.</li>
+                            </ol>
+
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Installing Apps on Mobile & Tablet</h3>
+                            <p class="text-gray-600 mb-6">For flexibility, you can install Google apps on your mobile devices. While convenient for quick tasks, some administrative functions, like setting up a grading system, are best done on a computer.</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse mb-8">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="p-4 font-semibold text-sm text-gray-600 border-b">App Name</th>
+                                            <th class="p-4 font-semibold text-sm text-gray-600 border-b">Android App</th>
+                                            <th class="p-4 font-semibold text-sm text-gray-600 border-b">iOS App</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white">
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b text-gray-700">Google Classroom</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://play.google.com/store/apps/details?id=com.google.android.apps.classroom" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://apps.apple.com/us/app/google-classroom/id924625801" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b text-gray-700">Google Meet</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://play.google.com/store/apps/details?id=com.google.android.apps.meetings" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://apps.apple.com/us/app/google-meet/id1013231476" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b text-gray-700">Google Chat</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://play.google.com/store/apps/details?id=com.google.android.apps.dynamite" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://apps.apple.com/us/app/google-chat/id1163852619" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b text-gray-700">Google Calendar</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://play.google.com/store/apps/details?id=com.google.android.calendar" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://apps.apple.com/us/app/google-calendar-get-organized/id909319292" target="_blank" class="text-teal-600 hover:underline">Install</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-gray-500">For a complete experience, also install Google Docs, Sheets, and Slides.</p>
+                        </div>
+                    </section>
+                    
+                    <section id="classroom" class="content-section hidden">
+                        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-4">Mastering Google Classroom</h2>
+                            <p class="text-gray-600 mb-8">Google Classroom is your digital command center. In this section, you'll learn how to create your virtual classroom, invite your students to join, and use the Stream feature to communicate announcements and share resources effectively. These are the foundational skills for managing your online course.</p>
+
+                            <div class="mb-10">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Creating Your First Class</h3>
+                                <ol class="list-decimal list-inside space-y-3 text-gray-700 mb-6">
+                                    <li>Go to <a href="https://classroom.google.com" target="_blank" class="text-teal-600 font-medium hover:underline">classroom.google.com</a>.</li>
+                                    <li>Click the <code class="bg-gray-200 text-gray-800 px-2 py-1 rounded">+</code> button in the top-right corner and select 'Create class'.</li>
+                                    <li>Enter a <span class="font-semibold">Class Name</span> (required), and optionally add a Section, Subject, and Room.</li>
+                                    <li>Click 'Create'. Your new classroom is now ready.</li>
+                                </ol>
+                                <a href="https://www.youtube.com/watch?v=M6L-nZ1gL3Q" target="_blank" class="inline-block bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition">▶ Watch: How to Create a Class</a>
+                            </div>
+
+                            <div class="mb-10">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Inviting Students</h3>
+                                <p class="text-gray-600 mb-6">Once your class is created, you need to add your students. Choose the method that works best for you. Remember to tell students they must join using their <code class="bg-gray-200 text-gray-800 px-1 py-0.5 rounded">@vsf.edu.ph</code> account.</p>
+                                <div id="invite-tabs-container">
+                                    <div class="border-b border-gray-200 mb-4">
+                                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                                            <button class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm" data-target="invite-link">Invite Link</button>
+                                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-target="invite-email">Email Invitation</button>
+                                            <button class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300" data-target="invite-code">Class Code</button>
+                                        </nav>
+                                    </div>
+                                    <div>
+                                        <div id="invite-link" class="tab-panel">
+                                            <p class="text-gray-700 mb-4">Share a direct link with students to join.</p>
+                                            <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                                                <li>Navigate to the 'People' tab in your class.</li>
+                                                <li>Click the 'Invite students' icon.</li>
+                                                <li>Click 'Copy invite link' and share it with your students.</li>
+                                            </ol>
+                                        </div>
+                                        <div id="invite-email" class="tab-panel hidden">
+                                            <p class="text-gray-700 mb-4">Send invitations directly to student emails.</p>
+                                            <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                                                <li>In the 'People' tab, click 'Invite students'.</li>
+                                                <li>Enter the VSF email addresses of your students.</li>
+                                                <li>Click 'Invite'. Students will receive an email to join.</li>
+                                            </ol>
+                                        </div>
+                                        <div id="invite-code" class="tab-panel hidden">
+                                            <p class="text-gray-700 mb-4">Students can use a code to join your class themselves.</p>
+                                            <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                                                <li>Find the Class Code on your 'Stream' page header.</li>
+                                                <li>Share this code with your students.</li>
+                                                <li>Students go to Classroom, click '+', choose 'Join class', and enter the code.</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Using the Stream</h3>
+                                <p class="text-gray-600 mb-6">The Stream is your class's announcement board. You can post messages, attach files, and control how students interact.</p>
+                                <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                    <li>To post, click 'Announce something to your class' on the Stream page.</li>
+                                    <li>Attach files from your computer, Google Drive items, YouTube videos, or web links.</li>
+                                    <li>You can 'Post' immediately, 'Schedule' for a future time, or 'Save draft'.</li>
+                                    <li>Manage student permissions in Settings: you can allow students to post and comment, only comment, or restrict all interactions to only teachers.</li>
+                                    <li>You can mute individual students or delete inappropriate posts by clicking the three-dot menu on any post.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="communication" class="content-section hidden">
+                        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-4">Communication Tools: Chat & Meet</h2>
+                            <p class="text-gray-600 mb-8">Effective communication is vital for a successful digital classroom. This section covers Google Chat for instant messaging and collaboration, and Google Meet for live virtual classes. You'll learn how to start conversations, create collaborative spaces, and manage your virtual meetings with essential in-call features.</p>
+                            
+                            <div class="mb-10">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Google Chat: Instant Communication</h3>
+                                <p class="text-gray-600 mb-4">Use Google Chat for quick questions, group discussions, and team projects. You can access it via web, a desktop app, or directly within Gmail.</p>
+                                <div class="grid md:grid-cols-2 gap-6 text-gray-700">
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-2">Communication Types:</h4>
+                                        <ul class="list-disc list-inside space-y-2">
+                                            <li><span class="font-semibold">Direct Message:</span> For one-on-one conversations.</li>
+                                            <li><span class="font-semibold">Group Chat:</span> For small, informal group discussions.</li>
+                                            <li><span class="font-semibold">Spaces:</span> For long-term projects. Spaces allow file sharing and task assignments, making them ideal for structured collaboration.</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-2">Key Features:</h4>
+                                        <ul class="list-disc list-inside space-y-2">
+                                            <li>Start a video call directly from a chat.</li>
+                                            <li>Share files from Google Drive.</li>
+                                            <li>Use "@" to mention specific people.</li>
+                                            <li>Set your availability status.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a href="https://www.youtube.com/watch?v=t7wgpyKOxfk" target="_blank" class="mt-6 inline-block bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition">▶ Watch: Getting Started with Chat</a>
+                            </div>
+
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Google Meet: Virtual Classes</h3>
+                                <p class="text-gray-600 mb-4">Google Meet is your tool for live video lessons, office hours, and parent-teacher conferences. You can start meetings instantly from Classroom or schedule them in advance using Google Calendar.</p>
+                                <div class="bg-teal-50 border-l-4 border-teal-400 p-4 rounded-r-lg mb-6">
+                                    <h4 class="font-bold text-teal-800">Scheduling a Meeting</h4>
+                                    <p class="text-teal-700 text-sm mt-1">For planned classes, create an event in Google Calendar and click 'Add Google Meet video conferencing'. This automatically generates a meeting link and adds it to the event details for all invitees.</p>
+                                </div>
+                                <h4 class="font-semibold text-lg mb-2 text-gray-700">Essential In-Meeting Features:</h4>
+                                <ul class="list-disc list-inside space-y-3 text-gray-700">
+                                    <li><span class="font-semibold">Mute Participants:</span> Reduce background noise by muting students.</li>
+                                    <li><span class="font-semibold">Present Your Screen:</span> Share a single tab, a window, or your entire screen to show instructional content.</li>
+                                    <li><span class="font-semibold">In-Call Chat:</span> Communicate with the class via text during the meeting.</li>
+                                    <li><span class="font-semibold">Raise Hand:</span> Students can signal they have a question without interrupting.</li>
+                                    <li><span class="font-semibold">Whiteboard (Jamboard):</span> Launch a collaborative whiteboard for brainstorming.</li>
+                                    <li><span class="font-semibold">Polls & Q&A:</span> Engage students and check for understanding.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="content" class="content-section hidden">
+                        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-4">Content & Organization</h2>
+                            <p class="text-gray-600 mb-8">Organizing your digital materials and schedule is key to a smooth workflow. This section explains how to leverage YouTube for rich educational content and how to use Google Calendar to keep track of deadlines and events. Learn to find and embed videos directly into your assignments and manage your class schedule effectively.</p>
+
+                            <div class="mb-10">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Leveraging YouTube</h3>
+                                <p class="text-gray-600 mb-4">YouTube is a vast library of educational content. You can embed videos directly into your Classroom assignments to create engaging, multimedia lessons.</p>
+                                <h4 class="font-semibold text-lg mb-2 text-gray-700">How to Embed a Video:</h4>
+                                <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-6">
+                                    <li>When creating an assignment or announcement, click the 'Add' button.</li>
+                                    <li>Select 'YouTube'.</li>
+                                    <li>You can either search for a video or paste a direct URL.</li>
+                                    <li>Click 'Add video'. You can even add interactive questions to the video for assignments.</li>
+                                </ol>
+                                <h4 class="font-semibold text-lg mb-2 text-gray-700">Recommended Resources:</h4>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <a href="https://www.youtube.com/teachers" target="_blank" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                        <p class="font-bold text-teal-700">▶ YouTube for Teachers</p>
+                                        <p class="text-sm text-gray-600">A hub with tips and curated educational playlists.</p>
+                                    </a>
+                                    <a href="https://www.youtube.com/channel/UCt8_4-B-4_2G_0F2vQ4-6sw" target="_blank" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                                        <p class="font-bold text-teal-700">▶ YouTube EDU</p>
+                                        <p class="text-sm text-gray-600">Videos from experts like PBS, TEDEd, and Khan Academy.</p>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800 mb-4">Organizing with Google Calendar</h3>
+                                <p class="text-gray-600 mb-6">Google Calendar integrates with Classroom to help you and your students stay organized. Assignment due dates automatically appear on the calendar.</p>
+                                <div class="grid md:grid-cols-2 gap-6 text-gray-700">
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-2">Classroom Calendar</h4>
+                                        <p>Shows all assignments and questions with due dates. You can access this from the main menu in Classroom. You cannot add events here manually.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-lg mb-2">Google Calendar</h4>
+                                        <p>A full-featured calendar where you can see class due dates and also add your own events (e.g., field trips, exam reminders) or personal reminders (visible only to you).</p>
+                                    </div>
+                                </div>
+                                <a href="https://www.youtube.com/watch?v=sifmsZwRAx0" target="_blank" class="mt-6 inline-block bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700 transition">▶ Watch: Google Calendar for Teachers</a>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="support" class="content-section hidden">
+                        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-sm">
+                            <h2 class="text-3xl font-bold text-gray-900 mb-4">Help & Support</h2>
+                            <p class="text-gray-600 mb-8">Even the most tech-savvy teachers need help sometimes. This section outlines the proper procedures for getting technical support and resetting your password. Understanding these processes ensures that technical issues cause minimal disruption to your teaching.</p>
+
+                            <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mb-8">
+                                <h4 class="font-bold text-red-800">For Password Resets, Contact Your Admin</h4>
+                                <p class="text-red-700 text-sm mt-1">If you forget your password, you <span class="font-semibold">must</span> contact the Victoria School Foundation IT Administrator. For security reasons, teachers cannot reset their own passwords. Your administrator will provide you with a temporary password to regain access.</p>
+                            </div>
+
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Self-Service Support Resources</h3>
+                            <p class="text-gray-600 mb-6">For "how-to" questions or troubleshooting features, Google provides excellent resources. Before contacting an admin, check these official sources for quick answers.</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="p-4 font-semibold text-sm text-gray-600 border-b">Resource</th>
+                                            <th class="p-4 font-semibold text-sm text-gray-600 border-b">Description</th>
+                                            <th class="p-4 font-semibold text-sm text-gray-600 border-b">Link</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white">
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b font-medium text-gray-800">Classroom Help Center</td>
+                                            <td class="p-4 border-b text-gray-700">Official step-by-step guides for all Classroom features.</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://support.google.com/edu/classroom/" target="_blank" class="text-teal-600 hover:underline">Visit</a></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b font-medium text-gray-800">Meet Help Center</td>
+                                            <td class="p-4 border-b text-gray-700">Instructions and troubleshooting for Google Meet.</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://support.google.com/meet/" target="_blank" class="text-teal-600 hover:underline">Visit</a></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b font-medium text-gray-800">Workspace Learning Center</td>
+                                            <td class="p-4 border-b text-gray-700">Training guides and productivity tips for all apps.</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://support.google.com/a/users" target="_blank" class="text-teal-600 hover:underline">Visit</a></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="p-4 border-b font-medium text-gray-800">Classroom Help Community</td>
+                                            <td class="p-4 border-b text-gray-700">Ask questions and get answers from other educators.</td>
+                                            <td class="p-4 border-b text-gray-700"><a href="https://support.google.com/edu/classroom/community" target="_blank" class="text-teal-600 hover:underline">Visit</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('#main-nav a');
+            const contentSections = document.querySelectorAll('.content-section');
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            function switchContent(targetId) {
+                contentSections.forEach(section => {
+                    section.classList.toggle('hidden', section.id !== targetId);
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.target === targetId);
+                });
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.dataset.target;
+                    switchContent(targetId);
+                    if (window.innerWidth < 1024) {
+                        sidebar.classList.add('-translate-x-full');
+                        sidebarOverlay.classList.add('hidden');
+                    }
+                });
+            });
+
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+            });
+            
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            });
+
+            const inviteTabsContainer = document.getElementById('invite-tabs-container');
+            if(inviteTabsContainer){
+                const tabButtons = inviteTabsContainer.querySelectorAll('.tab-button');
+                const tabPanels = inviteTabsContainer.querySelectorAll('.tab-panel');
+
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const targetId = this.dataset.target;
+
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+
+                        tabPanels.forEach(panel => {
+                            panel.classList.toggle('hidden', panel.id !== targetId);
+                        });
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
